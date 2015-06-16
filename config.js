@@ -13,11 +13,18 @@ module.exports = {
     {
       selector: '.cover-image[itemprop=image]',
       attr: 'src',
-      property: 'icon'
+      property: 'icon',
+      replacer: ['w300','w256']
     },
     {
       selector: '.document-subtitle.category',
       property: 'categories'
+    },
+    {
+      selector: '.screenshot[itemprop=screenshot]',
+      attr: 'src',
+      property: 'screenshots',
+      replacer: ['h310', 'h700']
     },
     {
       selector: 'meta[itemprop=ratingValue]',

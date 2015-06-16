@@ -31,10 +31,27 @@ var parse = function(playId, url, config, callback) {
     var $ = parser.load(body);
     selectors.forEach(function(selector) {
       var el = mainSelector + ' ' + selector.selector;
-      var match = $(el);
-      var val = selector.attr
-        ? match.attr(selector.attr)
-        : match.text().trim();
+      var match = $(el), val;
+      // handle selectors that are returning multiple elements
+      if (match.length > 1) {
+        val = [];
+        for (m in match) {
+          if (typeof match[m].attribs !== "undefined") {
+            var v = match[m].attribs[selector.attr];
+            if (selector.replacer) {
+              v = v.replace(selector.replacer[0], selector.replacer[1]);
+            }
+            val.push(v);
+          }
+        }
+      } else {
+        val = selector.attr
+          ? match.attr(selector.attr)
+          : match.text().trim();
+        if (selector.replacer) {
+           val = val.replace(selector.replacer[0], selector.replacer[1]);
+        }
+      }
       result[selector.property] = val;
     });
     callback(null, result);
