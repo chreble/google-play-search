@@ -1,6 +1,6 @@
 #!/usr/bin/env/ node
 
-var play = require('google-play-search');
+var play = require('./index.js');
 play.fetch(process.argv.slice(2), function(err, gameData) {
   console.log(gameData);
 });

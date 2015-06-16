@@ -21,20 +21,20 @@ module.exports = {
       property: 'categories'
     },
     {
+      selector: '.text-body[itemprop=description]',
+      property: 'description',
+      text: true
+    },
+    {
       selector: '.screenshot[itemprop=screenshot]',
       attr: 'src',
       property: 'screenshots',
       replacer: ['h310', 'h700']
     },
     {
-      selector: 'meta[itemprop=ratingValue]',
-      attr: 'content',
-      property: 'rating'
-    },
-    {
-      selector: 'meta[itemprop=ratingCount]',
-      attr: 'content',
-      property: 'ratingCount'
+      selector: '.play-action-container[data-video-url*="www.youtube.com"]',
+      property: 'video',
+      attr: 'data-video-url'
     },
     {
       selector: '.meta-info .content[itemprop=operatingSystems]',

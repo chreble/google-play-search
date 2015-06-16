@@ -2,6 +2,7 @@ var util = require('util');
 var _request = require('request');
 var parser = require('whacko');
 var config = require('./config');
+var htmlToText = require('html-to-text');
 
 exports.fetch = function(playId, lang, callback) {
   if(!callback) {
@@ -18,9 +19,8 @@ exports.request = function(url, callback) {
 
 var parse = function(playId, url, config, callback) {
   var result = {
-    webUrl: url,
-    marketUrl: 'market://details?id=' + playId,
-    id: playId
+    url: url,
+    pkgName: playId[0]
   };
 
   var mainSelector = config.mainSelector;
@@ -36,7 +36,7 @@ var parse = function(playId, url, config, callback) {
       if (match.length > 1) {
         val = [];
         for (m in match) {
-          if (typeof match[m].attribs !== "undefined") {
+          if (typeof match[m].attribs !== 'undefined') {
             var v = match[m].attribs[selector.attr];
             if (selector.replacer) {
               v = v.replace(selector.replacer[0], selector.replacer[1]);
@@ -48,8 +48,13 @@ var parse = function(playId, url, config, callback) {
         val = selector.attr
           ? match.attr(selector.attr)
           : match.text().trim();
+        // post replacement
         if (selector.replacer) {
            val = val.replace(selector.replacer[0], selector.replacer[1]);
+        }
+        // convert output (explicitly) to text?
+        if (selector.text === true) {
+          val = htmlToText.fromString(val);
         }
       }
       result[selector.property] = val;
